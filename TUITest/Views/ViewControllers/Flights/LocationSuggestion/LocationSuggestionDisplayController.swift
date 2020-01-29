@@ -26,9 +26,15 @@ class LocationSuggestionDisplayController: UIViewController {
     var viewModel: LocationSuggestionDisplayViewModel!
     weak var delegate: LocationSuggestionDisplayDelegate?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.tableFooterView = UIView()
+    }
+
     // MARK: - Search
     public func search(withTerm term: String) {
         viewModel.startSearching(forSearchTerm: term)
+        tableView.reloadData()
     }
 }
 
@@ -36,8 +42,7 @@ class LocationSuggestionDisplayController: UIViewController {
 extension LocationSuggestionDisplayController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let location = viewModel?.searchLocation(for: indexPath.row) else {
-            // TODO: Display an error here
-            return
+            return displayAlert(title: "Error", message: GeneralError.unexpectedError.errorDescription ?? "")
         }
         delegate?.locationSuggestionDisplayerController(self, didSelectLocation: location)
     }

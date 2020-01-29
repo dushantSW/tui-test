@@ -22,7 +22,7 @@ import GameKit
 class FlightSearchGraph {
     private var graph = GKGraph()
     private var graphNodes: [LocationGraphNode] = []
-    private var locations: Set<Location>?
+    private(set) var locations: Set<Location>?
 
     // MARK: - Initializers
     func createGraph(withFlightConnections connections: [FlightConnection]) {

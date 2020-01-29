@@ -31,6 +31,11 @@ struct FlightSearchViewModel {
     /// Delegate to model callbacks
     var delegate: FlightSearchDelegate?
 
+    /// Returns an array of the available locations
+    var availableLocations: [Location]? {
+        return Array(searchGraph.locations ?? Set())
+    }
+
     init(withService service: FlightDataService = .shared) {
         self.service = service
     }

@@ -16,6 +16,7 @@ class FlightSearchController: UIViewController {
     @IBOutlet private weak var costTitleLabel: UILabel!
     @IBOutlet private weak var costLabel: UILabel!
 
+    private var suggestionController: LocationSuggestionDisplayController?
     private var indicator: UIActivityIndicatorView?
 
     var viewModel = FlightSearchViewModel()
@@ -32,6 +33,32 @@ class FlightSearchController: UIViewController {
         super.viewWillAppear(animated)
         indicator?.startAnimating()
         viewModel.loadFlightConnections()
+    }
+
+    // MARK: - Suggestions controller
+    private func createSuggestionsController() {
+        let storyboard = UIStoryboard(name: "FlightSearch", bundle: .main)
+        let identifier = "LocationSuggestionDisplayController"
+        guard let controller = storyboard.instantiateViewController(withIdentifier: identifier) as? LocationSuggestionDisplayController else { return }
+        controller.viewModel = LocationSuggestionDisplayViewModel(locations: viewModel.availableLocations ?? [])
+        controller.delegate = self
+        controller.modalPresentationStyle = .popover
+        controller.preferredContentSize = CGSize(width: view.frame.width / 2, height: view.frame.height / 2)
+        self.suggestionController = controller
+    }
+
+    private func showSuggestionController(forTextField textField: UITextField) {
+        guard let controller = suggestionController else { return }
+        let presentationController = controller.popoverPresentationController
+        presentationController?.sourceView = textField
+        presentationController?.sourceRect = textField.bounds
+        presentationController?.permittedArrowDirections = UIPopoverArrowDirection.up
+        presentationController?.delegate = self
+        present(controller, animated: true, completion: nil)
+    }
+
+    private func hideSuggestionController() {
+        suggestionController?.dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Search
@@ -82,6 +109,7 @@ extension FlightSearchController: FlightSearchDelegate {
 
     func fetchDidRetrieveConnections(_ model: FlightSearchViewModel) {
         indicator?.stopAnimating()
+        createSuggestionsController()
     }
 }
 
@@ -95,11 +123,17 @@ extension FlightSearchController: LocationSuggestionDisplayDelegate {
             arrivalTextField.text = didSelectLocation.name
             arrivalTextField.resignFirstResponder()
         }
+        hideSuggestionController()
         startSearchIfNeeded()
     }
 }
 
 extension FlightSearchController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        suggestionController?.search(withTerm: textField.text ?? "")
+        return true
+    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == departureTextField {
             departureTextField.resignFirstResponder()
@@ -111,7 +145,22 @@ extension FlightSearchController: UITextFieldDelegate {
         return true
     }
 
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        hideSuggestionController()
+        showSuggestionController(forTextField: textField)
+    }
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         startSearchIfNeeded()
+    }
+}
+
+extension FlightSearchController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }
