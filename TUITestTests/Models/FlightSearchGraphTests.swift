@@ -43,7 +43,7 @@ class FlightSearchGraphTests: XCTestCase {
 
         // THEN
         expect{ try result.get() }.toNot(beNil())
-        expect{ try result.get().via }.to(beNil())
+        expect{ try result.get().legs }.to(beNil())
         expect{ try result.get().totalCost }.to(equal(120))
     }
 
@@ -53,13 +53,24 @@ class FlightSearchGraphTests: XCTestCase {
 
         // THEN
         expect{ try result.get() }.toNot(beNil())
-        expect{ try result.get().via }.to(equal(londonLocation))
+        expect{ try result.get().legs?.contains(self.londonLocation) }.to(beTrue())
         expect{ try result.get().totalCost }.to(equal(250))
+    }
+
+    func testThatMultipleLegsReturnsCorrectPrice() {
+        // WHEN
+        let result = graph.searchCheapestRoute(from: londonLocation, to: capeTownLocation)
+
+        // THEN
+        expect{ try result.get() }.toNot(beNil())
+        expect{ try result.get().legs?.contains(self.tokoyoLocation) }.to(beTrue())
+        expect{ try result.get().legs?.contains(self.sydneyLocation) }.to(beTrue())
+        expect{ try result.get().totalCost }.to(equal(520))
     }
 
     func testThatNonExistingFlightReturnsFailure() {
         // WHEN
-        let result = graph.searchCheapestRoute(from: londonLocation, to: capeTownLocation)
+        let result = graph.searchCheapestRoute(from: portoLocation, to: losAngelesLocation)
 
         // THEN
         expect { try result.get() }.to(throwError(FlightSearchGraphError.noRouteFound))

@@ -1,24 +1,20 @@
 PODS:
   - Fakery (4.1.1)
   - Nimble (8.0.5)
-  - ObjectMapper (3.5.1)
 
 DEPENDENCIES:
   - Fakery
   - Nimble
-  - ObjectMapper (~> 3.4)
 
 SPEC REPOS:
   trunk:
     - Fakery
     - Nimble
-    - ObjectMapper
 
 SPEC CHECKSUMS:
   Fakery: d3380c4aa1efe7631c0831d7e26aa9db4491f014
   Nimble: 4ab1aeb9b45553c75b9687196b0fa0713170a332
-  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
 
-PODFILE CHECKSUM: a7a4f2b1ff0fda1e28a960d27a752113955492d8
+PODFILE CHECKSUM: ba8062640db59d8e426cd2e2f89dae0ad537573b
 
 COCOAPODS: 1.8.4

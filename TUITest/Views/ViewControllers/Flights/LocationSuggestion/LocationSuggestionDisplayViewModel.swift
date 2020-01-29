@@ -13,7 +13,7 @@ struct LocationSuggestionDisplayViewModel {
     private let availableLocations: [Location]
 
     /// Returns default cell identifier
-    let defaultCellIdentifier = "locationSuggestionDisplayCell"
+    let defaultCellIdentifier = "LocationSuggestionDisplayTableViewCell"
 
     /// Returns number of the rows that the table should display
     var numberOfRows: Int {
@@ -36,6 +36,6 @@ struct LocationSuggestionDisplayViewModel {
     /// Any found locations are available under searchLocation(for index:)
     /// - Parameter term: Term that we are searching for.
     public mutating func startSearching(forSearchTerm term: String) {
-        self.searchFoundLocations = availableLocations.filter({ $0.name.lowercased().contains(term.lowercased()) })
+        self.searchFoundLocations = availableLocations.filter({ $0.name.localizedCaseInsensitiveContains(term) })
     }
 }

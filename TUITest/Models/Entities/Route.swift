@@ -11,6 +11,6 @@ import Foundation
 struct Route {
     let from: Location
     let to: Location
-    let via: Location?
+    let legs: [Location]?
     let totalCost: Double
 }

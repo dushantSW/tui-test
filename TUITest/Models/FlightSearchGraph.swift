@@ -21,17 +21,20 @@ import GameKit
 /// See LocationGraphNode
 class FlightSearchGraph {
     private var graph = GKGraph()
-    private var connections: [FlightConnection] = []
     private var graphNodes: [LocationGraphNode] = []
+    private var locations: Set<Location>?
 
     // MARK: - Initializers
     func createGraph(withFlightConnections connections: [FlightConnection]) {
         self.graph = GKGraph()
-        self.connections = connections
-        self.createAGraphWithFlights()
+        self.createAGraphWithFlights(connections)
     }
 
     // MARK: - Graph search
+    public func location(byName name: String) -> Location? {
+        return locations?.first(where: { $0.name.caseInsensitiveCompare(name) == .orderedSame })
+    }
+
     public func searchCheapestRoute(from: Location, to: Location) -> Result<Route, Error> {
         guard let fromNode = graphNodes.first(where: { $0.location == from }) else {
             return .failure(FlightSearchGraphError.departureNodeNotFound)
@@ -39,9 +42,12 @@ class FlightSearchGraph {
         guard let toNode = graphNodes.first(where: { $0.location == to }) else {
             return .failure(FlightSearchGraphError.arrivalNodeNotFound)
         }
+        return searchCheapestRoute(from: fromNode, to: toNode)
+    }
 
-        let path = graph.findPath(from: fromNode, to: toNode)
-        guard !path.isEmpty && path.count <= 3 else {
+    public func searchCheapestRoute(from: GKGraphNode, to: GKGraphNode) -> Result<Route, Error> {
+        let path = graph.findPath(from: from, to: to)
+        guard !path.isEmpty else {
             return .failure(FlightSearchGraphError.noRouteFound)
         }
         return .success(route(from: path))
@@ -54,9 +60,11 @@ class FlightSearchGraph {
 
         // We have a direct flight
         if nodes.count == 2 {
-            return Route(from: locations[0], to: locations[1], via: nil, totalCost: totalCost)
+            return Route(from: locations[0], to: locations[1], legs: nil, totalCost: totalCost)
+        } else {
+            let legs: [Location] = Array(locations[1...(locations.count - 2)])
+            return Route(from: locations[0], to: locations[locations.count - 1], legs: legs, totalCost: totalCost)
         }
-        return Route(from: locations[0], to: locations[2], via: locations[1], totalCost: totalCost)
     }
 
     private func costOfTotalTrip(between nodes: [GKGraphNode]) -> Float {
@@ -68,9 +76,10 @@ class FlightSearchGraph {
     }
 
     // MARK: - Graph creating
-    private func createAGraphWithFlights() {
+    private func createAGraphWithFlights(_ connections: [FlightConnection]) {
         // Convert each distinct location to a node
-        self.graphNodes = getDistinctLocations().map({ LocationGraphNode(withLocation: $0) })
+        self.locations = getDistinctLocations(from: connections)
+        self.graphNodes = locations?.compactMap({ LocationGraphNode(withLocation: $0) }) ?? []
 
         // Add these nodes to the graph
         graph.add(graphNodes)
@@ -83,7 +92,7 @@ class FlightSearchGraph {
         })
     }
 
-    private func getDistinctLocations() -> Set<Location> {
+    private func getDistinctLocations(from connections: [FlightConnection]) -> Set<Location> {
         var locations: Set<Location> = Set<Location>(connections.compactMap({ $0.from }))
         connections.compactMap({ $0.to }).forEach({ locations.insert($0) })
         return locations

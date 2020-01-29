@@ -5,9 +5,6 @@ target 'TUITest' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for TUITest
-  pod 'ObjectMapper', '~> 3.4'
-
   target 'TUITestTests' do
     inherit! :search_paths
 

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ObjectMapper
 
 /// Describes a single location on the map by it's
 /// name, lat and long coordinates.
