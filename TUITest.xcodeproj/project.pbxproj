@@ -18,7 +18,6 @@
 		1236F2AF23E0913A004718F5 /* LocationSuggestionDisplayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2AE23E0913A004718F5 /* LocationSuggestionDisplayViewModel.swift */; };
 		1236F2B523E09188004718F5 /* LocationSuggestionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2B423E09188004718F5 /* LocationSuggestionViewModelTests.swift */; };
 		1236F2B823E091C7004718F5 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2B723E091C7004718F5 /* TestUtils.swift */; };
-		1236F2BC23E0B0F6004718F5 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2BB23E0B0F6004718F5 /* Array+Extensions.swift */; };
 		1236F2C123E0B937004718F5 /* FlightSearchGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2C023E0B937004718F5 /* FlightSearchGraph.swift */; };
 		1236F2C323E0CE57004718F5 /* LocationGraphNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2C223E0CE57004718F5 /* LocationGraphNode.swift */; };
 		1236F2C523E0D0CC004718F5 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1236F2C423E0D0CC004718F5 /* Route.swift */; };
@@ -63,7 +62,6 @@
 		1236F2AE23E0913A004718F5 /* LocationSuggestionDisplayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionDisplayViewModel.swift; sourceTree = "<group>"; };
 		1236F2B423E09188004718F5 /* LocationSuggestionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSuggestionViewModelTests.swift; sourceTree = "<group>"; };
 		1236F2B723E091C7004718F5 /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
-		1236F2BB23E0B0F6004718F5 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		1236F2C023E0B937004718F5 /* FlightSearchGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightSearchGraph.swift; sourceTree = "<group>"; };
 		1236F2C223E0CE57004718F5 /* LocationGraphNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGraphNode.swift; sourceTree = "<group>"; };
 		1236F2C423E0D0CC004718F5 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
@@ -271,7 +269,6 @@
 		1236F2BA23E0B0EA004718F5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				1236F2BB23E0B0F6004718F5 /* Array+Extensions.swift */,
 				12B1435823E17E4300AEA5A5 /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
@@ -544,7 +541,6 @@
 				1236F29F23E087E7004718F5 /* FlightConnection.swift in Sources */,
 				12B1435B23E17F0A00AEA5A5 /* Constants.swift in Sources */,
 				125151DA23E0E6D1001FE707 /* FlightConnectionResponseTransformer.swift in Sources */,
-				1236F2BC23E0B0F6004718F5 /* Array+Extensions.swift in Sources */,
 				1236F27723E0856F004718F5 /* AppDelegate.swift in Sources */,
 				12B1435923E17E4300AEA5A5 /* UIViewController+Extensions.swift in Sources */,
 				1236F29C23E085A2004718F5 /* FlightDataService.swift in Sources */,

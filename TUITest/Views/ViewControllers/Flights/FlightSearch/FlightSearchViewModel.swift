@@ -25,7 +25,7 @@ enum FlightSearchViewModelError: LocalizedError {
 }
 
 struct FlightSearchViewModel {
-    private var searchGraph = FlightSearchGraph()
+    private var searchGraph: FlightSearchGraph
     private var service: FlightDataService
 
     /// Delegate to model callbacks
@@ -36,8 +36,9 @@ struct FlightSearchViewModel {
         return Array(searchGraph.locations ?? Set())
     }
 
-    init(withService service: FlightDataService = .shared) {
+    init(withService service: FlightDataService = .shared, searchGraph: FlightSearchGraph = .init()) {
         self.service = service
+        self.searchGraph = searchGraph
     }
 
     public func search(from: String, to: String) throws -> Route {

@@ -35,6 +35,20 @@ class FlightSearchViewModelDelegateMock: FlightSearchDelegate {
     }
 }
 
+class FlightSearchGraphMock: FlightSearchGraph {
+    var location: Location?
+    var searchingName: String?
+
+    override func location(byName name: String) -> Location? {
+        if let searchingName = searchingName, searchingName == name { return location }
+        return nil
+    }
+
+    override func searchCheapestRoute(from: Location, to: Location) -> Result<Route, Error> {
+        return .success(Route(from: from, to: to, legs: nil, totalCost: 20))
+    }
+}
+
 class FlightSearchViewModelTests: XCTestCase {
     func testThatViewModelErrorCallsErrorDelegate() {
         // GIVEN
@@ -80,5 +94,35 @@ class FlightSearchViewModelTests: XCTestCase {
 
         // THEN
         expect(delegate.connectionsRetrievedCalled).toEventually(beTrue())
+    }
+
+    func testThatSearchInvalidDepartureReturnsError() {
+        let viewModel = FlightSearchViewModel(searchGraph: FlightSearchGraphMock())
+
+        expect { try viewModel.search(from: "London", to: "Parise") }
+            .to(throwError(FlightSearchViewModelError.locationNotfound(name: "London")))
+    }
+
+    func testThatSearchInvalidArrivalReturnsError() {
+        let graphMock = FlightSearchGraphMock()
+        graphMock.searchingName = "Departure"
+        graphMock.location = .southPole()
+
+        let viewModel = FlightSearchViewModel(searchGraph: graphMock)
+
+        expect { try viewModel.search(from: "Departure", to: "Arrival") }
+            .to(throwError(FlightSearchViewModelError.locationNotfound(name: "Arrival")))
+    }
+
+    func testThatSearchValidLocationsReturnRoute() {
+        let graphMock = FlightSearchGraphMock()
+        graphMock.searchingName = "Destination"
+        graphMock.location = .southPole()
+
+        let viewModel = FlightSearchViewModel(searchGraph: graphMock)
+
+        let result = try? viewModel.search(from: "Destination", to: "Destination")
+        expect(result).toNot(beNil())
+        expect(result?.totalCost).to(equal(20))
     }
 }

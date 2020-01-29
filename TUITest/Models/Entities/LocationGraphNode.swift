@@ -31,9 +31,8 @@ class LocationGraphNode: GKGraphNode {
         return price[node] ?? 0
     }
 
-    func addConnection(to node: GKGraphNode, bidirectional: Bool = false, price: Float) {
-        self.addConnections(to: [node], bidirectional: bidirectional)
+    func addConnection(to node: GKGraphNode, price: Float) {
+        self.addConnections(to: [node], bidirectional: false)
         self.price[node] = price
-        if bidirectional { (node as? LocationGraphNode)?.price[self] = price }
     }
 }

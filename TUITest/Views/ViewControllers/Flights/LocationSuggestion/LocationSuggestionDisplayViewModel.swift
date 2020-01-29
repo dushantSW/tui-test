@@ -27,7 +27,8 @@ struct LocationSuggestionDisplayViewModel {
     /// Returns the searched location from the array if available
     /// - Parameter index: position of the location
     public func searchLocation(for index: Int) -> Location? {
-        return searchFoundLocations?[safe: index]
+        guard let locations = searchFoundLocations else { return nil }
+        return locations.indices.contains(index) ? searchFoundLocations?[index] : nil
     }
 
     /// Starts the searching for the location with the given name and
